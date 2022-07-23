@@ -4,8 +4,6 @@ new Vue({
         selection: {
             house: null,
             room: null,
-            plan: null,
-            old_price: null,
             from_date: '',
             to_date: '',
             cat_count: 1,
@@ -33,15 +31,6 @@ new Vue({
                     { id: 'one_window', name: '1畳(窓あり)', price: 5500 },
                     { id: 'one', name: '1畳(窓なし)', price: 5500 }
                 ],
-                plans: [
-                    { id: 'basic', name: '毎日報告プラン', price: 0, description: "" },
-                    { id: 'report', name: '最終日報告プラン', price: -1000, description: "・最終日報告プランでお見積りご案内させて頂きます。\n・毎日、報告希望（1日1,100円追加）の場合はお申し出くださいませ。" }
-                ],
-                old_prices: [
-                    { id: 'none', name: 'なし', value: 0, additional_cat_value: 0 },
-                    { id: 'end', name: '-¥1,000/日（最終日）', value: -1000 },
-                    { id: 'old', name: '-¥1,000/日（旧）', value: -1000 }
-                ],
             },
             LQd85lKTPb1VDheSmAzU: {
                 name: '湘南店',
@@ -53,16 +42,6 @@ new Vue({
                     { id: 'five', name: '５畳', price: 5500 },
                     { id: 'two', name: '２畳', price: 4500 }
                 ]                ,
-                plans: [
-                    { id: 'all', name: 'すべて', price: 0, description: '' },
-                    { id: 'basic', name: '基本プラン（文章報告プラン）', price: 0, description: "" },
-                    { id: 'movie', name: '動画報告プラン', price: 500, description: '' }
-                ],
-                old_prices: [
-                    { id: 'none', name: 'なし', value: 0, additional_cat_value: 0 },
-                    { id: '-800-yukichi', name: '-¥800/日(ゆきち2畳）', value: -800, additional_cat_value: -1200 },
-                    { id: '1800', name: '-¥1800/日(ゆきち)', value: -1800, additional_cat_value: -1200 }
-                ],
             },
         },
         transportation_fee: {
@@ -71,10 +50,6 @@ new Vue({
             sending: 0
         },
         rooms: [
-        ],
-        plans: [
-        ],
-        old_prices: [
         ],
         additional_cat_fee: 0,
         high_seasons: [
@@ -151,8 +126,6 @@ new Vue({
         onChangeHouse: function() {
             const selectedHouse = this.houses[this.selection.house.id]
             this.rooms = selectedHouse.rooms
-            this.plans = selectedHouse.plans
-            this.old_prices = selectedHouse.old_prices
             this.additional_cat_fee = selectedHouse.additional_cat_fee
         },
         onChangeAirport: function() {
@@ -179,8 +152,8 @@ new Vue({
             this.selection.options.push(option)
         },
         onClickEstimate: function() {
-            if (!this.selection.house || !this.selection.room || !this.selection.plan) {
-                alert('「店舗」・「部屋」・「プラン」を全て選択してください')
+            if (!this.selection.house || !this.selection.room ) {
+                alert('「店舗」・「部屋」を全て選択してください')
                 return
             }
             this.adjustSelection()
@@ -191,18 +164,10 @@ new Vue({
             } else {
                 rooms = [this.selection.room]
             }
-            let plans
-            if (this.selection.plan.id === 'all') {
-                plans = this.plans.filter(plan => plan.id !== 'all')
-            } else {
-                plans = [this.selection.plan]
-            }
 
             let estimations = [];
             rooms.forEach(room => {
-                plans.forEach(plan => {
-                    estimations.push(this.createEstimation(room, plan, days))
-                })
+                    estimations.push(this.createEstimation(room, days))
             })
             this.estimations = estimations
         },
@@ -217,38 +182,34 @@ new Vue({
                 this.selection.cat_count = 1
             }
         },
-        createEstimation: function (room, plan, days) {
-            const name = `${room.name}部屋 - ${plan.name}`
+        createEstimation: function (room, days) {
+            const name = `${room.name}部屋`
             const basic_fee= this.calculateBasicFee(room, days)
             const additional_cat_fee = this.selection.cat_count > 1 ?
                 this.calculateAdditionalCatFee(this.additional_cat_fee, this.selection.cat_count, days) :
                 null
             const transportation_fee = this.calculateTransportationFee()
-            const plan_fee = this.calculatePlan(plan, days)
             const high_season_fees = this.resolveHighSeasonFees()
             const option_fees = this.calculateOptions()
 
             const basic_fee_total = basic_fee.total
             const additional_cat_fee_total = additional_cat_fee ? additional_cat_fee.total : 0
             const transportation_fee_total = transportation_fee ? transportation_fee.total : 0
-            const plan_fee_total = plan_fee ? plan_fee.total : 0
             const sum_up = (acc, value) => acc + value
             const high_season_fees_total = high_season_fees.length > 0 ? high_season_fees.map(fee => fee.total).reduce(sum_up) : 0
             const option_fees_total = option_fees.length > 0 ? option_fees.map(fee => fee.total).reduce(sum_up) : 0
 
-            const total = basic_fee_total + additional_cat_fee_total + transportation_fee_total + plan_fee_total + high_season_fees_total + option_fees_total
+            const total = basic_fee_total + additional_cat_fee_total + transportation_fee_total + high_season_fees_total + option_fees_total
             const consumption_tax = Math.ceil(total * 0.1)
             const tax_include = total + consumption_tax
             return {
                 selection: JSON.parse(JSON.stringify(this.selection)), // deep copy
                 name: name,
                 room: room,
-                plan: plan,
                 days: days,
                 basic_fee: basic_fee,
                 additional_cat_fee: additional_cat_fee,
                 transportation_fee: transportation_fee,
-                plan_fee: plan_fee,
                 high_season_fees: high_season_fees,
                 option_fees: option_fees,
                 total: total,
@@ -257,8 +218,7 @@ new Vue({
             }
         },
         calculateBasicFee: function(room, days) {
-            const old_price =this.selection.old_price.value
-            const unit_price = room.price + old_price
+            const unit_price = room.price
             const start_day = moment(this.selection.from_date).format('M/D')
             const end_day = moment(this.selection.to_date).format('M/D')
 
@@ -271,8 +231,7 @@ new Vue({
             }
         },
         calculateAdditionalCatFee: function(additional_cat_fee, cat_counts, days) {
-            const old_price =this.selection.old_price.additional_cat_value
-            const unit_price = additional_cat_fee + old_price
+            const unit_price = additional_cat_fee
             const additional_cat_counts = cat_counts - 1
             return {
                 name: '頭数追加料金',
@@ -340,19 +299,6 @@ new Vue({
                 return `${pickup} (お迎え)`
             } else {
                 return `${sending} (お送り)`
-            }
-        },
-        calculatePlan: function(plan, days) {
-            if (plan.price <= 0) {
-                return null
-            }
-            return {
-                name: plan.name,
-                unit_price: plan.price,
-                description: plan.description,
-                days: days,
-                total: plan.price * days,
-                formula: `${this.$options.filters.formatYen(plan.price)} × ${days}日分`
             }
         },
         calculateDays: function() {
@@ -433,11 +379,11 @@ new Vue({
             const estimationNameSolver = this.estimations.length > 1 ? (estimation) => `【${estimation.name}】\n` : (_) => ''
             const text = this.estimations.map(estimation => {
                 return `
-${estimationNameSolver(estimation)}${estimation.plan ? estimation.plan.description : ''}
+${estimationNameSolver(estimation)}
 
 【見積もり料金】ねこべや${this.selection.house.name}店(${estimation.room.name}部屋)　猫${estimation.selection.cat_count}匹
 基本料金：${estimation.basic_fee.formula}=${this.$options.filters.formatYen(estimation.basic_fee.total)}（税抜）
-${create_optional_fee_text(estimation.additional_cat_fee)}${create_optional_fee_text(estimation.transportation_fee)}${create_optional_fee_text(estimation.plan_fee)}${create_high_season_fees_text(estimation.high_season_fees)}${create_option_fees_text(estimation.option_fees)}
+${create_optional_fee_text(estimation.additional_cat_fee)}${create_optional_fee_text(estimation.transportation_fee)}${create_high_season_fees_text(estimation.high_season_fees)}${create_option_fees_text(estimation.option_fees)}
 合計金額　${this.$options.filters.formatYen(estimation.tax_include)}（税込：消費税10%）
 `
             })
