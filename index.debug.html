@@ -1,0 +1,295 @@
+<html lang="ja" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:on="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+            .main {
+                width: 750px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+            .main {
+                width: 350px;
+            }
+        }
+    </style>
+    <link href="form-validation.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div id="app" class="container main">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="logo_nekobeya.png" height="72" alt="">
+        <h2>見積もり</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-12 mb-4">
+            <label for="house">店舗</label>
+            <select class="custom-select d-block w-100" v-model="selection.house" id="house" v-on:change="onChangeHouse" required>
+                <option v-for="house in selectableHouses" v-bind:value="house">
+                    {{ house.name }}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-3 col-sm-12 mb-4">
+            <label for="room">部屋</label>
+            <select class="custom-select d-block w-100" id="room" v-model="selection.room" required>
+                <option v-for="room in rooms" v-bind:value="room">
+                    {{ room.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                Please provide a valid state.
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-12 mb-4">
+            <label for="plan">プラン</label>
+            <select class="custom-select d-block w-100" id="plan" v-model="selection.plan" required>
+                <option v-for="plan in plans" v-bind:value="plan">
+                    {{ plan.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                Please provide a valid state.
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-12 mb-4 ">
+            <label for="old_price">旧料金</label>
+            <select class="custom-select d-block w-100" id="old_price" v-model="selection.old_price" required>
+                <option v-for="old_price in old_prices" v-bind:value="old_price">
+                    {{ old_price.name }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                Please provide a valid state.
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mb-4">
+            <label for="date_from">利用日(From)</label>
+            <input type="date" class="form-control" id="date_from" v-model="selection.from_date" placeholder="" value="" required>
+            <div class="invalid-feedback">
+                Valid first name is required.
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-4">
+            <label for="date_to">利用日(To)</label>
+            <input type="date" class="form-control" id="date_to" v-model="selection.to_date" placeholder="" value="" required>
+            <div class="invalid-feedback">
+                Valid first name is required.
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mb-4">
+            <label for="cat_count">猫数</label>
+            <input type="number" class="form-control" id="cat_count" v-model.number="selection.cat_count" placeholder="" value="" required>
+            <div class="invalid-feedback">
+                Valid first name is required.
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-4">
+            <label>送迎</label>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="transportation_airport" v-model="selection.is_airport" @change="onChangeAirport">
+                <label class="custom-control-label" for="transportation_airport">空港送迎</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="transportation_pickup" v-model="selection.is_pickup" @change="onChangePickup">
+                <label class="custom-control-label" for="transportation_pickup">お迎え</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="transportation_send" v-model="selection.is_sending" @change="onChangeSending">
+                <label class="custom-control-label" for="transportation_send">お送り</label>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-show="(this.selection.is_airport || this.selection.is_pickup || this.selection.is_sending)">
+        <div class="col-12 mb-3">
+            <h6>送迎料金</h6>
+        </div>
+        <div class="col-12 mb-2" v-show="this.selection.is_airport">
+            <div class="input-group">
+                <input type="text" class="form-control" disabled value="空港送迎">
+                <input type="number" class="form-control" placeholder="無料" v-model.number="transportation_fee.airport">
+                <div class="invalid-feedback" style="width: 100%;">
+                    Your username is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-2" v-show="this.selection.is_pickup">
+            <div class="input-group">
+                <input type="text" class="form-control" disabled value="お迎え">
+                <input type="number" class="form-control" placeholder="料金" v-model.number="transportation_fee.pickup">
+                <div class="invalid-feedback" style="width: 100%;">
+                    Your username is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-2" v-show="this.selection.is_sending">
+            <div class="input-group">
+                <input type="text" class="form-control" disabled value="お送り">
+                <input type="number" class="form-control" placeholder="料金" v-model.number="transportation_fee.sending">
+                <div class="invalid-feedback" style="width: 100%;">
+                    Your username is required.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h6>オプション</h6>
+        </div>
+
+        <div class="col-12 mb-2" v-for="(option, index) in selection.options">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="品目" v-model="option.name" required>
+                <input type="number" class="form-control" placeholder="単価(税抜)" v-model.number="option.unit_price" required>
+                <input type="number" class="form-control" placeholder="個数" v-model.number="option.count" required>
+                <div class="invalid-feedback" style="width: 100%;">
+                    Your username is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 m-3 ">
+            <button class="btn btn-info btn-sm" v-on:click="onClickAddOption">品目を追加</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 m-2 text-center">
+            <button class="btn btn-warning btn-block" v-on:click="onClickEstimate">見積もり作成</button>
+        </div>
+    </div>
+
+    <div class="row" v-for="estimation in estimations">
+        <div class="col-12 mb-4 mt-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">{{estimation.name}}</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div v-bind:class="[estimation.basic_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{estimation.basic_fee.name}}</h6>
+                        <small v-bind:class="[estimation.basic_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{estimation.basic_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[estimation.basic_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{estimation.basic_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed" v-if="estimation.additional_cat_fee">
+                    <div v-bind:class="[estimation.additional_cat_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{estimation.additional_cat_fee.name}}</h6>
+                        <small v-bind:class="[estimation.additional_cat_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{estimation.additional_cat_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[estimation.additional_cat_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{estimation.additional_cat_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed" v-if="estimation.transportation_fee">
+                    <div v-bind:class="[estimation.transportation_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{estimation.transportation_fee.name}}</h6>
+                        <small v-bind:class="[estimation.transportation_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{estimation.transportation_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[estimation.transportation_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{estimation.transportation_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed" v-if="estimation.plan_fee">
+                    <div v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{estimation.plan_fee.name}}</h6>
+                        <small v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{estimation.plan_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{estimation.plan_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-light" v-for="high_season_fee in estimation.high_season_fees">
+                    <div v-bind:class="[high_season_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{high_season_fee.name}}</h6>
+                        <small v-bind:class="[high_season_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{high_season_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[high_season_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{high_season_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-light" v-for="option_fee in estimation.option_fees">
+                    <div v-bind:class="[option_fee.total <= 0 ? 'text-success' : '']">
+                        <h6 class="my-0">{{option_fee.name}}</h6>
+                        <small v-bind:class="[option_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                            {{option_fee.formula}}
+                        </small>
+                    </div>
+                    <span v-bind:class="[option_fee.total <= 0 ? 'text-success' : 'text-muted']">
+                        {{option_fee.total | formatYen}}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>合計</span>
+                    <strong>{{estimation.total | formatYen}} ({{estimation.tax_include | formatYen}})</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" v-if="this.estimations.length > 0">
+        <div class="col-12 m-2 text-center">
+            <button class="btn btn-success btn-block" v-on:click="onClickCopyEstimation">クリップボードにコピー</button>
+        </div>
+    </div>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2020 Company Name</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+    </footer>
+</div>
+<script src="moment.min.js"></script>
+<script src="form-validation.js"></script>
+<script src="vue-dev.js"></script>
+<script src="axios.min.js"></script>
+<script src="estimate.js"></script>
+</body>
+
+</html>
