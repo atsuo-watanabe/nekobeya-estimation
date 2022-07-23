@@ -66,28 +66,7 @@
                 Please provide a valid state.
             </div>
         </div>
-        <div class="col-md-3 col-sm-12 mb-4">
-            <label for="plan">プラン</label>
-            <select class="custom-select d-block w-100" id="plan" v-model="selection.plan" required>
-                <option v-for="plan in plans" v-bind:value="plan">
-                    {{ plan.name }}
-                </option>
-            </select>
-            <div class="invalid-feedback">
-                Please provide a valid state.
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-12 mb-4 ">
-            <label for="old_price">旧料金</label>
-            <select class="custom-select d-block w-100" id="old_price" v-model="selection.old_price" required>
-                <option v-for="old_price in old_prices" v-bind:value="old_price">
-                    {{ old_price.name }}
-                </option>
-            </select>
-            <div class="invalid-feedback">
-                Please provide a valid state.
-            </div>
-        </div>
+
     </div>
     <div class="row">
         <div class="col-md-6 col-sm-12 mb-4">
@@ -229,17 +208,7 @@
                         {{estimation.transportation_fee.total | formatYen}}
                     </span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between lh-condensed" v-if="estimation.plan_fee">
-                    <div v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : '']">
-                        <h6 class="my-0">{{estimation.plan_fee.name}}</h6>
-                        <small v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : 'text-muted']">
-                            {{estimation.plan_fee.formula}}
-                        </small>
-                    </div>
-                    <span v-bind:class="[estimation.plan_fee.total <= 0 ? 'text-success' : 'text-muted']">
-                        {{estimation.plan_fee.total | formatYen}}
-                    </span>
-                </li>
+
                 <li class="list-group-item d-flex justify-content-between bg-light" v-for="high_season_fee in estimation.high_season_fees">
                     <div v-bind:class="[high_season_fee.total <= 0 ? 'text-success' : '']">
                         <h6 class="my-0">{{high_season_fee.name}}</h6>
