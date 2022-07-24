@@ -260,7 +260,7 @@ new Vue({
             }
 
             return {
-                name: `送迎代 (${kind})`,
+                name: `送迎代 (${kind})\n`,
                 airport_fee: this.transportation_fee.airport,
                 pickup_fee: this.transportation_fee.pickup,
                 sending_fee: this.transportation_fee.sending,
