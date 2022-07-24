@@ -278,7 +278,7 @@ new Vue({
 
             let airport = null
             if (this.selection.is_airport) {
-                airport = this.transportation_fee.airport === 0 ? '空港送迎無料' : `${this.$options.filters.formatYen(this.transportation_fee.airport)}`
+                airport = this.transportation_fee.airport === 0 ? '無料' : `${this.$options.filters.formatYen(this.transportation_fee.airport)}`
             }
 
             let pickup = null
@@ -358,7 +358,7 @@ new Vue({
                     return ''
                 }
 
-                const details = high_season_fees.map(fee => `${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）`)
+                const details = high_season_fees.map(fee => `${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）\n`)
                 return `シーズン料金：${details}`
             }
             const create_option_fees_text = (fees) => {
