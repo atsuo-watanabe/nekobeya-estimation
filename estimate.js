@@ -372,11 +372,11 @@ new Vue({
                 if (!fee) {
                     return ''
                 }
-                return `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`
+                return `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）\n`
             }
             const prefix_note = this.houses[this.selection.house['id']]['estimation_prefix_note']
             const suffixNote = this.houses[this.selection.house['id']]['estimation_suffix_note']
-            const estimationNameSolver = this.estimations.length > 1 ? (estimation) => `【${estimation.name}】` : (_) => ''
+            const estimationNameSolver = this.estimations.length > 1 ? (estimation) => `【${estimation.name}】\n` : (_) => ''
             const text = this.estimations.map(estimation => {
                 return `
 ${estimationNameSolver(estimation)}
@@ -386,7 +386,7 @@ ${create_optional_fee_text(estimation.additional_cat_fee)}${create_optional_fee_
 合計金額　${this.$options.filters.formatYen(estimation.tax_include)}（税込み：消費税10%）になります。
 `
             })
-
+                .join("\n")
             const prefix = `${prefix_note}`
             const suffix = `\n${suffixNote}`
 
