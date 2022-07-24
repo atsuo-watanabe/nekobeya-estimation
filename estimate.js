@@ -21,8 +21,8 @@ new Vue({
         houses: {
             wxAArFXAzvwHMUQshtRq: {
                 name: '羽田空港店',
-                estimation_prefix_note: 'ねこべや羽田空港店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\n\nお見積りご案内させて頂きます。',
-                estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討よろしくお願い致します。\nねこべや羽田空港店',
+                estimation_prefix_note: 'さま\nねこべや羽田空港店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\nお見積りご案内させて頂きます。',
+                estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや羽田空港店',
                 additional_cat_fee: 3000,
                 rooms: [
                     { id: 'all', name: 'すべて', price: 0 },
@@ -107,9 +107,9 @@ new Vue({
         formatYen: function (value) {
             if (value < 0) {
                 const inversion = value * -1
-                return `-¥${inversion.toLocaleString()}`
+                return `${inversion.toLocaleString()}円`
             }
-            return `¥${value.toLocaleString()}`
+            return `${value.toLocaleString()}円`
         }
     },
     computed: {
@@ -145,9 +145,9 @@ new Vue({
         },
         onClickAddOption: function() {
             const option = {
-                name: '',
+                name: '時間外手数料',
                 unit_price: null,
-                count: null
+                count: 1
             }
             this.selection.options.push(option)
         },
@@ -358,7 +358,7 @@ new Vue({
                     return ''
                 }
 
-                const details = high_season_fees.map(fee => `${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜）\n`).join('')
+                const details = high_season_fees.map(fee => `${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`)
                 return `シーズン料金：${details}`
             }
             const create_option_fees_text = (fees) => {
@@ -366,29 +366,28 @@ new Vue({
                     return ''
                 }
 
-                return fees.map(fee => `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜）\n`).join('')
+                return fees.map(fee => `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`)
             }
             const create_optional_fee_text = (fee) => {
                 if (!fee) {
                     return ''
                 }
-                return `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜）\n`
+                return `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`
             }
             const prefix_note = this.houses[this.selection.house['id']]['estimation_prefix_note']
             const suffixNote = this.houses[this.selection.house['id']]['estimation_suffix_note']
-            const estimationNameSolver = this.estimations.length > 1 ? (estimation) => `【${estimation.name}】\n` : (_) => ''
+            const estimationNameSolver = this.estimations.length > 1 ? (estimation) => `【${estimation.name}】` : (_) => ''
             const text = this.estimations.map(estimation => {
                 return `
 ${estimationNameSolver(estimation)}
-
-【見積もり料金】ねこべや${this.selection.house.name}店(${estimation.room.name}部屋)　猫${estimation.selection.cat_count}匹
-基本料金：${estimation.basic_fee.formula}=${this.$options.filters.formatYen(estimation.basic_fee.total)}（税抜）
+【見積もり料金】ねこべや${this.selection.house.name}(${estimation.room.name}部屋)　猫${estimation.selection.cat_count}匹
+基本料金：${estimation.basic_fee.formula}=${this.$options.filters.formatYen(estimation.basic_fee.total)}（税抜き）
 ${create_optional_fee_text(estimation.additional_cat_fee)}${create_optional_fee_text(estimation.transportation_fee)}${create_high_season_fees_text(estimation.high_season_fees)}${create_option_fees_text(estimation.option_fees)}
-合計金額　${this.$options.filters.formatYen(estimation.tax_include)}（税込：消費税10%）
+合計金額　${this.$options.filters.formatYen(estimation.tax_include)}（税込み：消費税10%）になります。
 `
             })
-                .join("\n")
-            const prefix = `${prefix_note}\n`
+
+            const prefix = `${prefix_note}`
             const suffix = `\n${suffixNote}`
 
             this.copyTextToClipboard(prefix + text + suffix);
