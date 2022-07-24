@@ -239,7 +239,7 @@ new Vue({
                 additional_cat_counts: additional_cat_counts,
                 days: days,
                 total: unit_price * additional_cat_counts * days,
-                formula: `${ this.$options.filters.formatYen(unit_price) } × ${additional_cat_counts}匹 × ${days}日`
+                formula: `${ this.$options.filters.formatYen(unit_price) } × ${additional_cat_counts}匹 × ${days}日分`
             }
         },
         calculateTransportationFee: function() {
@@ -260,7 +260,7 @@ new Vue({
             }
 
             return {
-                name: `送迎代 (${kind})\n`,
+                name: `送迎代 (${kind})`,
                 airport_fee: this.transportation_fee.airport,
                 pickup_fee: this.transportation_fee.pickup,
                 sending_fee: this.transportation_fee.sending,
@@ -358,7 +358,7 @@ new Vue({
                     return ''
                 }
 
-                const details = high_season_fees.map(fee => `${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`)
+                const details = high_season_fees.map(fee => `${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）`)
                 return `シーズン料金：${details}`
             }
             const create_option_fees_text = (fees) => {
@@ -366,13 +366,13 @@ new Vue({
                     return ''
                 }
 
-                return fees.map(fee => `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）`)
+                return fees.map(fee => `${fee.name}：${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）`)
             }
             const create_optional_fee_text = (fee) => {
                 if (!fee) {
                     return ''
                 }
-                return `${fee.name}:${fee.formula}=${this.$options.filters.formatYen(fee.total)}（税抜き）\n`
+                return `${fee.name}：${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）\n`
             }
             const prefix_note = this.houses[this.selection.house['id']]['estimation_prefix_note']
             const suffixNote = this.houses[this.selection.house['id']]['estimation_suffix_note']
@@ -381,9 +381,9 @@ new Vue({
                 return `
 ${estimationNameSolver(estimation)}
 【見積もり料金】ねこべや${this.selection.house.name}(${estimation.room.name}部屋)　猫${estimation.selection.cat_count}匹
-基本料金：${estimation.basic_fee.formula}=${this.$options.filters.formatYen(estimation.basic_fee.total)}（税抜き）
+基本料金：${estimation.basic_fee.formula}＝${this.$options.filters.formatYen(estimation.basic_fee.total)}（税抜き）
 ${create_optional_fee_text(estimation.additional_cat_fee)}${create_optional_fee_text(estimation.transportation_fee)}${create_high_season_fees_text(estimation.high_season_fees)}${create_option_fees_text(estimation.option_fees)}
-合計金額　${this.$options.filters.formatYen(estimation.tax_include)}（税込み：消費税10%）になります。
+合計金額：${this.$options.filters.formatYen(estimation.tax_include)}（税込み：消費税10%）になります。
 `
             })
                 .join("\n")
