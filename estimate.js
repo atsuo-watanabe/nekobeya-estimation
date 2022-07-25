@@ -19,7 +19,7 @@ new Vue({
             ]
         },
         houses: {
-            wxAArFXAzvwHMUQshtRq: {
+            haneda: {
                 name: '羽田空港店',
                 estimation_prefix_note: 'さま\nねこべや羽田空港店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\nお見積りご案内させて頂きます。',
                 estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや羽田空港店',
@@ -30,6 +30,18 @@ new Vue({
                     { id: 'two', name: '2畳', price: 5500 },
                     { id: 'one_window', name: '1畳(窓あり)', price: 5500 },
                     { id: 'one', name: '1畳(窓なし)', price: 5500 }
+                ],
+            },
+            nagoya: {
+                name: '名古屋店',
+                estimation_prefix_note: '',
+                estimation_suffix_note: '',
+                additional_cat_fee: 3000,
+                rooms: [
+                    { id: 'all', name: 'すべて', price: 0 },
+                    { id: 'four', name: '4畳', price: 7000 },
+                    { id: 'three', name: ' 3畳', price: 6000 },
+                    { id: 'two', name: ' 2畳', price: 5000 }
                 ],
             },
             LQd85lKTPb1VDheSmAzU: {
