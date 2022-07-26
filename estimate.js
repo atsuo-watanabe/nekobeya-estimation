@@ -25,11 +25,11 @@ new Vue({
                 estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや羽田空港店',
                 additional_cat_fee: 3000,
                 rooms: [
-                    { id: 'all', name: 'すべて', price: 0 },
                     { id: 'four', name: '4畳', price: 7000 },
                     { id: 'two', name: '2畳', price: 5500 },
                     { id: 'one_window', name: '1畳(窓あり)', price: 5500 },
-                    { id: 'one', name: '1畳(窓なし)', price: 5500 }
+                    { id: 'one', name: '1畳(窓なし)', price: 5500 },
+                    { id: 'all', name: 'すべて', price: 0 }
                 ],
             },
             nagoya: {
@@ -38,22 +38,40 @@ new Vue({
                 estimation_suffix_note: '◎お支払い方法はお預かり当日現金で宜しいでしょうか？\nその他、決済の方法ご希望の場合お申し出くださいませ。\n\n◎猫ちゃんの詳細お伺いします。お聞きしたこともありますが、再度よろしくお願いいたします。\n①現在の健康状態（投薬があれば記載ください）\n\n②性格や癖（臆病・甘えん坊など）\n\n③他社さんのペットホテルを利用されたことはありますでしょうか？ある場合は、体調を崩したことがありますか？（ご飯を食べない・下痢になった・トイレしないなど）\n\n④何かご要望があれば、ご記入下さい。（甘えん坊なので、たくさん遊んでほしい。出来る限り、一緒にいて欲しいなど）\n\n⑤猫ちゃんのお名前・性別・年齢・猫種\n\n⑥去勢・避妊手術の有無\n\n⑦ワクチンの有無\n\n◎持ち込み予定物 \n・ごはん（カリカリ・ウエット・おやつなど）⇒いつも食べてるごはんの準備おねがいします。\n・猫ちゃんグッズ（おもちゃ・ブランケット・いつも寝ているベッドなど）⇒必要なもの（臭いが付いているものがあると安心します）\n・トイレ⇒いつものトイレを利用して欲しい場合（トイレに神経質な子はトイレごとお預かりする場合もあります）\n\n◎当日ご提示いただくもの \n・免許証など住所確認ができる身分証 \n・ワクチン証明書\n\nご確認よろしくお願いいたします😊',
                 additional_cat_fee: 3000,
                 rooms: [
-                    { id: 'all', name: 'すべて', price: 0 },
                     { id: 'four', name: '4畳', price: 7000 },
                     { id: 'three', name: ' 3畳', price: 6000 },
-                    { id: 'two', name: ' 2畳', price: 5000 }
+                    { id: 'two', name: ' 2畳', price: 5000 },
+                    { id: 'all', name: 'すべて', price: 0 },
                 ],
             },
-            LQd85lKTPb1VDheSmAzU: {
-                name: '湘南店',
-                estimation_prefix_note: '',
-                estimation_suffix_note: '',
-                additional_cat_fee: 3000,
+            koganei: {
+                name: '小金井店',
+                estimation_prefix_note: 'さま\nねこべや小金井店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\nお見積りご案内させて頂きます。',
+                estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや運営事務局',
+                additional_cat_fee: 1800,
                 rooms: [
+                    { id: 'four', name: '5畳', price: 5000 },
+                    { id: 'two', name: '8畳', price: 7000 },
                     { id: 'all', name: 'すべて', price: 0 },
-                    { id: 'five', name: '５畳', price: 5500 },
-                    { id: 'two', name: '２畳', price: 4500 }
-                ]                ,
+                ],
+            },
+            toyonaka: {
+                name: '大阪豊中店',
+                estimation_prefix_note: 'さま\nねこべや大阪豊中店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\nお見積りご案内させて頂きます。',
+                estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや運営事務局',
+                additional_cat_fee: 1800,
+                rooms: [
+                    { id: 'four', name: '個室', price: 4500 }
+                ],
+            },
+            hodogaya: {
+                name: '保土ケ谷店',
+                estimation_prefix_note: 'さま\nねこべや保土ケ谷店をお問い合わせ頂き誠にありがとうございます。\nご希望の日程ですが、現時点でお預かり可能です。\nお見積りご案内させて頂きます。',
+                estimation_suffix_note: '上記内容でご予約進めてもよろしいでしょうか？\nご確認・ご検討のほどよろしくお願い致します。\nねこべや運営事務局',
+                additional_cat_fee: 1800,
+                rooms: [
+                    { id: 'four', name: '個室', price: 6000 }
+                ],
             },
         },
         transportation_fee: {
