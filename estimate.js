@@ -389,7 +389,7 @@ new Vue({
                 }
 
                 const details = high_season_fees.map(fee => `${fee.formula}＝${this.$options.filters.formatYen(fee.total)}（税抜き）\n`)
-                return `シーズン料金：${details}`
+                return `シーズン料金：${details}※キャンセル料：この期間は特別時期が含まれているため、ご予約お申込時点よりお見積料金の50%を頂きます。\n`
             }
             const create_option_fees_text = (fees) => {
                 if (fees.length < 1) {
